@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD Nure Alam | Ethical Hacker Portfolio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* UPDATED: Import Inter for body text and Fira Code for terminal elements */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;600;700;800&display=swap');
+        
+        :root {
+            /* Define the neon accent color */
+            --neon-green: #10b981; /* Tailwind 'green-500' */
+            --alert-red: #ef4444; /* Tailwind 'red-500' for danger/alert */
+            --warm-gold: #f59e0b; /* Tailwind 'amber-500' for warm glow */
+        }
+
+        body {
+            /* UPDATED: Use Inter as the primary professional font */
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: #0d1117; /* Very dark background */
+            color: #e5e7eb; /* Light gray text for contrast */
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle grid background for the hacker aesthetic (reduced opacity) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: linear-gradient(0deg, transparent 24px, rgba(16, 185, 129, 0.03) 25px),
+                              linear-gradient(90deg, transparent 24px, rgba(16, 185, 129, 0.03) 25px);
+            background-size: 25px 25px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        /* Canvas Styling: Must be absolute and cover the hero section */
+        #sketchCanvas {
+            display: block;
+            background-color: transparent;
+            opacity: 0.1; /* Keep the sketch very subtle */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Ensures it is behind the text (z-10) */
+        }
+
+        /* Monospace font and subtle neon effect for titles and code snippets */
+        .hacker-text {
+            font-family: 'Fira Code', monospace;
+            color: var(--neon-green);
+            /* Softened text shadow for a modern look */
+            text-shadow: 0 0 3px rgba(16, 185, 129, 0.5); 
+        }
+        
+        /* Keyframes for pulsing red glow effect */
+        @keyframes alert-glow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(239, 68, 68, 0.7), 0 0 10px rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 10px rgba(239, 68, 68, 1), 0 0 20px rgba(239, 68, 68, 0.6);
+            }
+        }
+
+        /* Class for Danger Alert Text */
+        .danger-alert-text {
+            color: var(--alert-red);
+            animation: alert-glow 1.5s infinite alternate;
+        }
+
+        /* Typing cursor animation */
+        .terminal-cursor {
+            border-right: 2px solid var(--neon-green);
+            animation: blink-cursor 0.7s step-end infinite;
+            display: inline-block;
+            margin-left: 2px;
+        }
+        @keyframes blink-cursor {
+            from, to { border-right-color: transparent }
+            50% { border-right-color: var(--neon-green) }
+        }
+
+        /* Animated Button Glow (more controlled) */
+        .neon-button {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+        }
+        .neon-button:hover {
+            box-shadow: 0 0 10px var(--neon-green), 0 0 20px rgba(16, 185, 129, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Project Card Hover Effect (subtle scale, removed aggressive glitch) */
+        .project-card {
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .project-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+    <!-- Load Font Awesome Icons (used for social links) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="noise-bg">
+    <!-- Navigation / Header -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10 border-b border-green-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-green-400">MD NURE ALAM</h1>
+            <!-- UPDATED: Navigation font reference -->
+            <nav class="space-x-4 hidden md:block font-['Fira_Code',_monospace]">
+                <a href="#about" class="text-green-400 hover:text-green-200 transition duration-300">SUMMARY</a>
+                <a href="#skills" class="text-green-400 hover:text-green-200 transition duration-300">SKILLS</a>
+                <a href="#projects" class="text-green-400 hover:text-green-200 transition duration-300">PROJECTS</a>
+                <a href="#contact" class="text-green-400 hover:text-green-200 transition duration-300">CONTACT</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section (Now includes the animated sketch canvas) -->
+        <section id="hero" class="text-center py-20 lg:py-32 relative overflow-hidden">
+            <!-- CANVAS ELEMENT FOR THE ANIMATED SKETCH BACKGROUND -->
+            <canvas id="sketchCanvas"></canvas>
+            
+            <!-- Content must be inside a higher z-index element -->
+            <div class="relative z-10 flex flex-col items-center">
+                
+                <h2 class="text-5xl md:text-7xl font-extrabold mb-4 uppercase tracking-wider danger-alert-text">
+                    MD NURE ALAM
+                </h2>
+                <p class="text-lg md:text-3xl text-gray-300 mb-10 hacker-text">
+                    // <span id="typing-text" class="text-green-400"></span>
+                    <span class="terminal-cursor"></span>
+                    _
+                </p>
+                <a href="#projects" class="neon-button inline-block px-8 py-3 bg-green-700/50 text-white font-bold rounded-lg border-2 border-green-500 hover:bg-green-700 transition duration-300">
+                    VIEW SECURITY ENGAGEMENTS <span class="ml-2">>></span>
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section - Combined Summary and Skills for professional flow -->
+        <section id="about" class="py-16 border-t border-b border-green-800/50 my-12">
+            <h3 class="text-3xl font-bold mb-10 hacker-text">01. CYBERSECURITY SUMMARY</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <!-- Professional Summary Text -->
+                <div class="lg:col-span-2 text-gray-400 text-lg leading-relaxed">
+                    <p class="mb-6">
+                        I am a **junior ethical hacker** with a strong passion for **cybersecurity and digital defense**. I’m currently building my skills in **penetration testing, vulnerability assessment, and network security**, with the goal of becoming a skilled Cybersecurity Analyst.
+                    </p>
+                    <p class="mb-6">
+                        Every day, I’m driven by curiosity and a desire to understand how systems work—and how to protect them. I enjoy learning about the latest threats, tools, and techniques in the cybersecurity field and constantly challenge myself through labs, **CTFs**, and hands-on projects.
+                    </p>
+                    <p>
+                        I’m currently looking for opportunities where I can grow, contribute, and learn alongside experienced professionals. Whether it’s identifying vulnerabilities or strengthening security protocols, I’m excited to play a part in making the digital world safer.
+                    </p>
+                </div>
+
+                <!-- Skills List -->
+                <div id="skills" class="lg:col-span-1">
+                    <h4 class="text-xl font-bold mb-4 text-green-400 font-['Fira_Code',_monospace]">CORE COMPETENCIES</h4>
+                    <ul class="text-gray-300 text-base space-y-2">
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Bug Hunting & Reporting</li>
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Penetration Testing (Web/Network)</li>
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Vulnerability Assessment</li>
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Capture The Flag (CTF) Player</li>
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Linux/Kali Usage</li>
+                        <li class="flex items-center"><span class="hacker-text mr-2">></span> Python Scripting for Automation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section (UPDATED FOR SECURITY FOCUS) -->
+        <section id="projects" class="py-16">
+            <h3 class="text-3xl font-bold mb-12 hacker-text">02. SECURITY ENGAGEMENTS & LABS</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1: Focus on professional outcome -->
+                <div class="project-card bg-gray-800 p-6 rounded-lg shadow-xl border border-green-700/50">
+                    <h4 class="text-2xl font-bold text-green-400 mb-3 font-['Fira_Code',_monospace]">01. Network Vulnerability Scan</h4>
+                    <p class="text-gray-400 mb-4">Executed comprehensive vulnerability scans on a simulated corporate network (using Nessus/OpenVAS), identifying and prioritizing critical RCE and XSS vulnerabilities.</p>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">Nessus</span>
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">Metasploit</span>
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">XSS/RCE</span>
+                        <span class="bg-green-800 text-white px-2 py-1 rounded-full">Remediation</span>
+                    </div>
+                    <a href="#" class="mt-4 inline-block text-sm text-green-300 hover:text-green-100 transition duration-300 font-['Fira_Code',_monospace]">View Report Summary <i class="fas fa-file-alt ml-1"></i></a>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card bg-gray-800 p-6 rounded-lg shadow-xl border border-green-700/50">
+                    <h4 class="text-2xl font-bold text-green-400 mb-3 font-['Fira_Code',_monospace]">02. Web Application Pentest Lab</h4>
+                    <p class="text-gray-400 mb-4">Conducted penetration testing on a dedicated web application environment (DVWA), exploiting SQL Injection and Cross-Site Scripting flaws, and providing defensive code fixes.</p>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">Burp Suite</span>
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">SQLi</span>
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">OWASP Top 10</span>
+                        <span class="bg-green-800 text-white px-2 py-1 rounded-full">Secure Coding</span>
+                    </div>
+                    <a href="#" class="mt-4 inline-block text-sm text-green-300 hover:text-green-100 transition duration-300 font-['Fira_Code',_monospace]">View Exploit Walkthrough <i class="fab fa-youtube ml-1"></i></a>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card bg-gray-800 p-6 rounded-lg shadow-xl border border-green-700/50">
+                    <h4 class="text-2xl font-bold text-green-400 mb-3 font-['Fira_Code',_monospace]">03. CTF Participation & Write-ups</h4>
+                    <p class="text-gray-400 mb-4">Regularly participate in Capture The Flag events (e.g., Hack The Box, TryHackMe), focusing on cryptanalysis and exploiting common Linux misconfigurations. Top 15% player rank.</p>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">TryHackMe</span>
+                        <span class="bg-red-800 text-white px-2 py-1 rounded-full">Cryptography</span>
+                        <span class="bg-green-800 text-white px-2 py-1 rounded-full">Linux Hardening</span>
+                        <span class="bg-green-800 text-white px-2 py-1 rounded-full">Bash Scripting</span>
+                    </div>
+                    <a href="#" class="mt-4 inline-block text-sm text-green-300 hover:text-green-100 transition duration-300 font-['Fira_Code',_monospace]">View Recent Write-up <i class="fas fa-external-link-alt ml-1"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 border-t border-green-800/50 mt-12">
+            <h3 class="text-3xl font-bold mb-8 hacker-text">03. GET IN TOUCH</h3>
+            <div class="bg-gray-800 p-8 rounded-lg shadow-xl max-w-lg mx-auto">
+                <p class="text-gray-400 mb-6 text-center">
+                    Let's connect to discuss your next technical challenge or system requirement.
+                </p>
+                <!-- Updated to show email address clearly -->
+                <div class="text-center mb-6">
+                    <p class="text-gray-300 font-['Fira_Code',_monospace]">Email Address:</p>
+                    <a href="mailto:mdnurealamapurbo@gmail.com" class="text-green-400 hover:text-green-200 transition duration-300 text-xl font-bold break-all">
+                        mdnurealamapurbo@gmail.com
+                    </a>
+                </div>
+
+                <!-- Simple Contact Button for MailTo -->
+                <a href="mailto:mdnurealamapurbo@gmail.com" class="neon-button block w-full text-center px-4 py-3 bg-green-700/50 text-white font-bold rounded-lg border-2 border-green-500 hover:bg-green-700 transition duration-300">
+                    <i class="fas fa-envelope mr-2"></i> SEND EMAIL NOW
+                </a>
+                
+                <p id="contact-status" class="text-center mt-4 text-green-400 text-sm font-['Fira_Code',_monospace]">STATUS: READY</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 border-t border-green-800/50 bg-gray-900/80 mt-12">
+        <div class="flex justify-center space-x-6 mb-4">
+            <a href="#" class="text-green-400 hover:text-white transition duration-300" aria-label="GitHub"><i class="fab fa-github fa-2x"></i></a>
+            <a href="#" class="text-green-400 hover:text-white transition duration-300" aria-label="LinkedIn"><i class="fab fa-linkedin-in fa-2x"></i></a>
+            <!-- UPDATED: Email link now uses mailto: -->
+            <a href="mailto:mdnurealamapurbo@gmail.com" class="text-green-400 hover:text-white transition duration-300" aria-label="Email"><i class="fas fa-envelope fa-2x"></i></a>
+        </div>
+        <p class="text-gray-500 text-sm">
+            &copy; 2024 MD.NURE_ALAM | Ethical Hacker Portfolio
+        </p>
+    </footer>
+
+    <!-- JavaScript for Typing Animation and Canvas Sketch -->
+    <script>
+        // IIFE for scope isolation
+        (function() {
+            // --- TYPING ANIMATION LOGIC ---
+            const textElement = document.getElementById('typing-text');
+            const phrases = [
+                "Ethical Hacker", 
+                "Penetration Tester", 
+                "Vulnerability Analyst", 
+                "CTF Player"
+            ];
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typingSpeed = 100; // milliseconds
+            let deletingSpeed = 50;
+            let delayBetweenPhrases = 1500; // milliseconds
+
+            function typeWriter() {
+                const currentPhrase = phrases[phraseIndex];
+                
+                if (isDeleting) {
+                    textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                    charIndex--;
+                    typingSpeed = deletingSpeed;
+                } else {
+                    textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                    typingSpeed = 100;
+                }
+
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    typingSpeed = delayBetweenPhrases;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    typingSpeed = 200;
+                }
+
+                setTimeout(typeWriter, typingSpeed);
+            }
+
+            // --- CANVAS SKETCH ANIMATION LOGIC (Digital Rain/Data Flow) ---
+            const canvas = document.getElementById('sketchCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            // Reduced particle count for better performance and subtlety
+            const particleCount = 40; 
+            const particleSize = 1;
+            const speed = 1.8;
+
+            function resizeCanvas() {
+                // Set canvas size to match the parent hero section container
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+                
+                // Reinitialize particles on resize
+                particles = [];
+                initParticles();
+            }
+
+            function initParticles() {
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        // Start particle randomly across the width and height
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vy: speed + Math.random() * 1.5, // Varying vertical speed
+                        // Faint green color for the data stream
+                        color: `rgba(16, 185, 129, ${0.1 + Math.random() * 0.3})` 
+                    });
+                }
+            }
+
+            function draw() {
+                // Draw a semi-transparent black layer to create faint trails
+                ctx.fillStyle = 'rgba(13, 17, 23, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    // Update position
+                    p.y += p.vy;
+
+                    // Reset particle if it goes off screen (from bottom to top)
+                    if (p.y > canvas.height) {
+                        p.y = 0;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    // Draw particle (small dot/trail)
+                    ctx.beginPath();
+                    // Draw a short vertical line for a trail effect
+                    ctx.rect(p.x, p.y, particleSize, particleSize * 4); 
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            // Add listener for window resizing
+            window.addEventListener('resize', resizeCanvas);
+
+            // Start all animations once the window is loaded
+            window.onload = function() {
+                typeWriter(); 
+                resizeCanvas(); // Initialize size and particles
+                draw(); // Start the animation loop
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,2 +1,4 @@
 🛡️ Md. Nure Alam — Cybersecurity Portfolio
-This portfolio was created with support from AI tools to help structure content, refine wording, and generate ideas.
+## 📝 Note
+
+This is my first portfolio, and I took some help from AI to build and organize it. I'm still learning and improving, and this is just the beginning of my cybersecurity journey!
